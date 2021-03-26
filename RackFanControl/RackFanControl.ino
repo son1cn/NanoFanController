@@ -16,14 +16,14 @@ const char MAGIC[]="FANC3";
 
 float SENSOR_CALIBRATION=7.55f,
       TEMP_MIN_1=30.0f, TEMP_MAX_1=50.0f, CURVE_1=0.7f;
-bool debugging=true, manual=false;
+bool debugging=false, manual=false;
 float temp=0,f1=0,f2=0,f3;
 uint16_t raw=0;
 unsigned long ts=0;
 
 
 void setup() {
-  Serial.begin(9600); 
+  //Serial.begin(9600); 
   dht.begin();
   pinMode(LED_BUILTIN,OUTPUT);
   digitalWrite(LED_BUILTIN,HIGH);
@@ -46,10 +46,10 @@ void setup() {
 
 void loop() {
   // Wait a few seconds between measurements.
-  Serial.println(F("entering loop"));
+  //Serial.println(F("entering loop"));
   //wdt_reset();
   delay(2000);
-  Serial.println(F("post delay"));
+  //Serial.println(F("post delay"));
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
   //float h = dht.readHumidity();
@@ -57,22 +57,22 @@ void loop() {
   //Serial.println(F("post humidity"));
   // Read temperature as Celsius
   temp = dht.readTemperature();
-  Serial.println(F("post temp"));
+  //Serial.println(F("post temp"));
 
-  printConfig();
+  //printConfig();
   
-  // Check if any reads failed and exit early (to try again).
+  /* Check if any reads failed and exit early (to try again).
   if (isnan(temp)){//isnan(h) || isnan(t)) {
     Serial.println("Failed to read from DHT sensor!");
     return;
-  }
+  }*/
   
   //Serial.print("Humidity: "); 
   //Serial.print(h);
   //Serial.print(" %\t");
-  Serial.print("Temperature: "); 
-  Serial.print(temp);
-  Serial.println("*C ");
+  //Serial.print("Temperature: "); 
+  //Serial.print(temp);
+  //Serial.println("*C ");
   if(ts==0||millis()-ts>=1000){
     //raw=analogRead(SENSOR);
     //if(!manual) temp=(float)raw/SENSOR_CALIBRATION;
@@ -81,8 +81,8 @@ void loop() {
     //f2=(float)(temp-TEMP_MIN_2)/(TEMP_MAX_2-TEMP_MIN_2);
     //f3=(float)(temp-TEMP_MIN_3)/(TEMP_MAX_3-TEMP_MIN_3);
     f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-    Serial.print("f1:");
-    Serial.println(f1);
+    //Serial.print("f1:");
+    //Serial.println(f1);
     //f2=pow(f2<0?0:f2>1?1:f2,CURVE_2);
     //f3=pow(f3<0?0:f3>1?1:f3,CURVE_3);
     OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
@@ -94,56 +94,56 @@ void loop() {
   delay(20000);
   f1=0.20f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(10000);
   f1=0.30f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(10000);
   f1=0.40f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(10000);
   f1=0.50f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(10000);
   f1=0.60f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(10000);
   f1=0.70f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(10000);
   f1=0.80f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(10000);
   f1=0.90f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(10000);
   f1=1.0f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  Serial.print("f1:");
-  Serial.println(f1);
+  //Serial.print("f1:");
+  //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
   delay(20000);
 }
