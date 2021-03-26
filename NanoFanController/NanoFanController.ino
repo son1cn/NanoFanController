@@ -17,7 +17,7 @@ float SENSOR_CALIBRATION=7.55f,
       TEMP_MIN_1=30.0f, TEMP_MAX_1=50.0f, CURVE_1=0.7f,
       TEMP_MIN_2=30.0f, TEMP_MAX_2=50.0f, CURVE_2=0.85f,
       TEMP_MIN_3=30.0f, TEMP_MAX_3=55.0f, CURVE_3=0.75f;
-bool debugging=false, manual=false;
+bool debugging=true, manual=false;
 float temp=0,f1=0,f2=0,f3;
 uint16_t raw=0;
 unsigned long ts=0;
