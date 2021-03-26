@@ -3,7 +3,7 @@
 #define DHTPIN 2     // what pin we're connected to
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
 
-int maxHum = 60;
+//int maxHum = 60;
 int maxTemp = 40;
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -15,7 +15,7 @@ DHT dht(DHTPIN, DHTTYPE);
 const char MAGIC[]="FANC3";
 
 float SENSOR_CALIBRATION=7.55f,
-      TEMP_MIN_1=30.0f, TEMP_MAX_1=50.0f, CURVE_1=0.7f;
+      TEMP_MIN_1=25.0f, TEMP_MAX_1=50.0f, CURVE_1=0.7f;
 bool debugging=false, manual=false;
 float temp=0,f1=0,f2=0,f3;
 uint16_t raw=0;
@@ -48,7 +48,7 @@ void loop() {
   // Wait a few seconds between measurements.
   //Serial.println(F("entering loop"));
   //wdt_reset();
-  delay(2000);
+  delay(20000);
   //Serial.println(F("post delay"));
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
@@ -91,8 +91,7 @@ void loop() {
     if(debugging) printStatus();
     ts=millis();
   }else delay(100);
-  delay(20000);
-  f1=0.20f;
+  /*f1=0.20f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
   //Serial.print("f1:");
   //Serial.println(f1);
@@ -145,7 +144,7 @@ void loop() {
   //Serial.print("f1:");
   //Serial.println(f1);
   OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(20000);
+  delay(20000);*/
 }
 
 bool loadSettings(){
