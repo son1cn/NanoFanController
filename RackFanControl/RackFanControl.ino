@@ -1,4 +1,5 @@
 #include "DHT.h"
+#include <stdio.h>
 
 #define DHTPIN 2     // what pin we're connected to
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
@@ -16,14 +17,14 @@ const char MAGIC[]="FANC3";
 
 float SENSOR_CALIBRATION=7.55f,
       TEMP_MIN_1=25.0f, TEMP_MAX_1=50.0f, CURVE_1=0.7f;
-bool debugging=true, manual=false;
+bool debugging=false, manual=false;
 float temp=0,f1=0,f2=0,f3;
-uint16_t raw=0;
+uint16_t raw=0, n=0;
 unsigned long ts=0;
-
+char buf[14], tempf[5], fanf[5];
 
 void setup() {
-  if(debugging)Serial.begin(9600); 
+  Serial.begin(9600); 
   dht.begin();
   pinMode(LED_BUILTIN,OUTPUT);
   digitalWrite(LED_BUILTIN,HIGH);
@@ -57,6 +58,7 @@ void loop() {
   //Serial.println(F("post humidity"));
   // Read temperature as Celsius
   temp = dht.readTemperature();
+  dtostrf(temp,4,2,tempf);
   //Serial.println(F("post temp"));
 
   //printConfig();
@@ -70,9 +72,9 @@ void loop() {
   //Serial.print("Humidity: "); 
   //Serial.print(h);
   //Serial.print(" %\t");
-  if(debugging)Serial.print("Temperature: "); 
-  if(debugging)Serial.print(temp);
-  if(debugging)Serial.print("*C ");
+  //erial.print("T:"); 
+  //Serial.print(temp);
+  //Serial.print(" ");
   if(ts==0||millis()-ts>=1000){
     //raw=analogRead(SENSOR);
     //if(!manual) temp=(float)raw/SENSOR_CALIBRATION;
@@ -80,8 +82,11 @@ void loop() {
     //f2=(float)(temp-TEMP_MIN_2)/(TEMP_MAX_2-TEMP_MIN_2);
     //f3=(float)(temp-TEMP_MIN_3)/(TEMP_MAX_3-TEMP_MIN_3);
     f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-    if(debugging)Serial.print("Fan:");
-    if(debugging)Serial.println(f1*100.0f);
+    dtostrf(f1*100.0f,4,2,fanf);
+    n=sprintf(buf,"T:%sF:%s",tempf,fanf);//"T:%05.2fF:%05.2f",temp, f1*100.0f);    
+    Serial.println(buf);
+    //Serial.print(" F:");
+    //Serial.println(f1*100.0f);
     //f2=pow(f2<0?0:f2>1?1:f2,CURVE_2);
     //f3=pow(f3<0?0:f3>1?1:f3,CURVE_3);
     OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
@@ -91,7 +96,7 @@ void loop() {
     ts=millis();
   }else delay(100);
 
-  delay(20000);
+  delay(5000);
   /*f1=0.20f;
   f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
   //Serial.print("f1:");
