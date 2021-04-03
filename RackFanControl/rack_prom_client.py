@@ -14,34 +14,27 @@ ser = serial.Serial(
         bytesize=serial.EIGHTBITS,
         timeout=1
 )
-# Create a metric to track time spent and requests made.
-REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
+# Create the metrics we want to see in Prometheus
 temp = Gauge('rack_temp', 'Rack Temperature')
 fan = Gauge('fan_speed', 'Rack Fan %')
-
-# Decorate function with metric.
-@REQUEST_TIME.time()
-def process_request(t):
-    """A dummy function that takes some time."""
-    time.sleep(t)
 
 if __name__ == '__main__':
     # Start up the server to expose the metrics.
     start_http_server(8000)
     # Generate some requests.
     while True:
-        #process_request(random.random())
-        #x=ser.read(ser.in_waiting)
+        #read from serial and strip the end of line chars
         x = ser.readline().strip()
-        #x = x.decode(encoding='UTF-8')
+        #wait if nothing has through on serial
         if x == b'':
             time.sleep(1)
             continue
         else:
+            #test code to see if find logic is working
             #print ("T: " + x[x.find("T:")+2:x.find("T:")+7] + " F: " + x[x.find("F:")+2:x.find("F:")+7])
+            
+            #take char array and decode to string
             x = x.decode(encoding='UTF-8')
-            #print(x)
-            #print(Decimal(x[x.find("F:")+2:x.find("F:")+7]))
+            #set the metrics
             temp.set(Decimal(x[x.find("T:")+2:x.find("T:")+7]))
             fan.set(Decimal(x[x.find("F:")+2:x.find("F:")+7]))
-        #print x
