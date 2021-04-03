@@ -4,14 +4,10 @@
 #define DHTPIN 2     // what pin we're connected to
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
 
-//int maxHum = 60;
 int maxTemp = 40;
 
 DHT dht(DHTPIN, DHTTYPE);
-//#include <avr/wdt.h>
 #include <EEPROM.h>
-
-//#define SENSOR A7 //Change this to A0 if using an Arduino Uno
 
 const char MAGIC[]="FANC3";
 
@@ -28,7 +24,6 @@ void setup() {
   dht.begin();
   pinMode(LED_BUILTIN,OUTPUT);
   digitalWrite(LED_BUILTIN,HIGH);
-  //wdt_enable(WDTO_2S);
   if(debugging) Serial.println(F("FAN CONTROLLER"));
   pinMode(9,OUTPUT);
   loadSettings();
@@ -46,111 +41,24 @@ void setup() {
 }
 
 void loop() {
-  // Wait a few seconds between measurements.
-  //Serial.println(F("entering loop"));
-  //wdt_reset();
-
-  //Serial.println(F("post delay"));
-  // Reading temperature or humidity takes about 250 milliseconds!
-  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  //float h = dht.readHumidity();
-
-  //Serial.println(F("post humidity"));
   // Read temperature as Celsius
   temp = dht.readTemperature();
+  //force temp to be string with 2 decimals
   dtostrf(temp,4,2,tempf);
-  //Serial.println(F("post temp"));
-
-  //printConfig();
   
-  /* Check if any reads failed and exit early (to try again).
-  if (isnan(temp)){//isnan(h) || isnan(t)) {
-    Serial.println("Failed to read from DHT sensor!");
-    return;
-  }*/
-  
-  //Serial.print("Humidity: "); 
-  //Serial.print(h);
-  //Serial.print(" %\t");
-  //erial.print("T:"); 
-  //Serial.print(temp);
-  //Serial.print(" ");
   if(ts==0||millis()-ts>=1000){
-    //raw=analogRead(SENSOR);
-    //if(!manual) temp=(float)raw/SENSOR_CALIBRATION;
     f1=(float)(temp-TEMP_MIN_1)/(TEMP_MAX_1-TEMP_MIN_1);
-    //f2=(float)(temp-TEMP_MIN_2)/(TEMP_MAX_2-TEMP_MIN_2);
-    //f3=(float)(temp-TEMP_MIN_3)/(TEMP_MAX_3-TEMP_MIN_3);
     f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
     dtostrf(f1*100.0f,4,2,fanf);
-    n=sprintf(buf,"T:%sF:%s",tempf,fanf);//"T:%05.2fF:%05.2f",temp, f1*100.0f);    
+    n=sprintf(buf,"T:%sF:%s",tempf,fanf);    
     Serial.println(buf);
-    //Serial.print(" F:");
-    //Serial.println(f1*100.0f);
-    //f2=pow(f2<0?0:f2>1?1:f2,CURVE_2);
-    //f3=pow(f3<0?0:f3>1?1:f3,CURVE_3);
     OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-    //OCR1B = (uint16_t)(320*f2); //set PWM width on pin 10
-    //OCR2B = (uint8_t)(79*f3); //set PWM width on pin 3
-    //if(debugging) printStatus();
     ts=millis();
   }else delay(100);
 
+  //wait 5 sec before starting loop again
   delay(5000);
-  /*f1=0.20f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(10000);
-  f1=0.30f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(10000);
-  f1=0.40f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(10000);
-  f1=0.50f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(10000);
-  f1=0.60f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(10000);
-  f1=0.70f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(10000);
-  f1=0.80f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(10000);
-  f1=0.90f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(10000);
-  f1=1.0f;
-  f1=pow(f1<0?0:f1>1?1:f1,CURVE_1);
-  //Serial.print("f1:");
-  //Serial.println(f1);
-  OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
-  delay(20000);*/
+ 
 }
 
 bool loadSettings(){

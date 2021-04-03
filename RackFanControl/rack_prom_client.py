@@ -1,10 +1,11 @@
+#Raspberry Pi Serial USB listener for arduino rack fan controller
+
 #!/usr/bin/env python3
 from prometheus_client import start_http_server, Summary, Gauge
 from decimal import Decimal
 import random
 import time
 import serial
-
 
 ser = serial.Serial(
         port='/dev/ttyUSB0',
@@ -21,7 +22,6 @@ fan = Gauge('fan_speed', 'Rack Fan %')
 if __name__ == '__main__':
     # Start up the server to expose the metrics.
     start_http_server(8000)
-    # Generate some requests.
     while True:
         #read from serial and strip the end of line chars
         x = ser.readline().strip()

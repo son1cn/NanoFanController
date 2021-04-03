@@ -2,6 +2,8 @@
 import time
 import serial
 
+#on rasp-pi USB serial device can be found using dmesg | grep tty
+
 ser = serial.Serial(
         port='/dev/ttyUSB0',
         baudrate = 9600,
