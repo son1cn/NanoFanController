@@ -1,4 +1,4 @@
-Items to do:
+Project to use Arduino and 12V PWM fans to control temperature for network rack
 
 	DHT input
 		Adafruit library
@@ -7,6 +7,7 @@ Items to do:
 	Control Loop
 		https://fdossena.com/?p=ArduinoFanControl/nano.md
 	
+<pre>
 Originally built with 
 DHT temp -> Arduino Nano -> 12V fan
 			   |
@@ -19,4 +20,5 @@ DHT temp -> Arduino Nano -> 12V fan
 			   |
 	        ESP8266 -> Prometheus Endpoint
 							|
-				Network Prometheus Control -> Grafana
+						Network Prometheus Control -> Grafana
+</pre>
