@@ -46,7 +46,7 @@ void loop() {
 	//force fan speed to be string with 2 decimals
     dtostrf(f1*100.0f,4,2,fanf);
 	//format serial output to "T:xx.xxF:yy.yy"
-    n=sprintf(buf,"T:%sF:%s",tempf,fanf);
+    sprintf(buf,"T:%sF:%s",tempf,fanf);
 	//send serial output
     Serial.println(buf);
     OCR1A = (uint16_t)(320*f1); //set PWM width on pin 9
