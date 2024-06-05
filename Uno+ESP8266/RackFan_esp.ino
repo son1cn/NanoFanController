@@ -44,12 +44,12 @@ uint32_t previous_read_time = 0;
 String strArr[2];
 
 // Set your Static IP address
-IPAddress local_IP(192, 168, 1, 20);
+IPAddress local_IP(192, 168, 2, 35);
 // Set your Gateway IP address
-IPAddress gateway(192, 168, 1, 1);
+IPAddress gateway(192, 168, 2, 1);
 
 IPAddress subnet(255, 255, 255, 0);
-IPAddress primaryDNS(192, 168, 2, 10);   //optional
+IPAddress primaryDNS(1, 1, 1, 1);   //optional
 IPAddress secondaryDNS(8, 8, 4, 4); //optional
 
 
